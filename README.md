@@ -10,7 +10,7 @@ A tiny animated keychain built on the Waveshare ESP32-S3-Touch-AMOLED-1.64 board
 
 <table>
 <tr>
-<td><img src="images/Backcover.jpg" width="270" alt="Assembled keychain, black enclosure, front view" /></td>
+<td><img src="images/Backcover.jpeg" width="270" alt="Assembled keychain, black enclosure, front view" /></td>
 <td><img src="images/device-cream.jpg" width="270" alt="Assembled keychain, cream enclosure, front view" /></td>
 <td><img src="images/enclosure-open.jpg" width="270" alt="Enclosure open, showing the board and battery" /></td>
 </tr>

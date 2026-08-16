@@ -1,4 +1,4 @@
-# Master Sword Keychain
+# Keybuddy
 
 A tiny animated keychain built on the Waveshare ESP32-S3-Touch-AMOLED-1.64 board. A glowing sword hovers on screen with falling weather (rain, snow, autumn leaves, or spring petals — rotating every couple of minutes), the occasional lightning strike, medieval-flavored typewriter text, real battery monitoring, shake-to-wake, and a manual "charging" animation.
 

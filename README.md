@@ -4,6 +4,16 @@ A tiny animated keychain built on the Waveshare ESP32-S3-Touch-AMOLED-1.64 board
 
 ![status](https://img.shields.io/badge/status-working-brightgreen) ![board](https://img.shields.io/badge/board-ESP32--S3--Touch--AMOLED--1.64-blue)
 
+> **🔰 New to Arduino or ESP32?** Follow the **[Getting Started Guide](GETTING_STARTED.md)** instead — it walks through every click needed, no coding experience required. Everything below this point assumes some familiarity with Arduino IDE already.
+
+## Gallery
+
+<p float="left">
+  <img src="images/device-black.jpg" width="270" alt="Assembled keychain, black enclosure, front view" />
+  <img src="images/device-cream.jpg" width="270" alt="Assembled keychain, cream enclosure, front view" />
+  <img src="images/enclosure-open.jpg" width="270" alt="Enclosure open, showing the board and battery" />
+</p>
+
 ## Features
 
 - Animated sword with a gentle idle float
@@ -18,9 +28,9 @@ A tiny animated keychain built on the Waveshare ESP32-S3-Touch-AMOLED-1.64 board
 
 ## Hardware required
 
-- **Waveshare ESP32-S3-Touch-AMOLED-1.64** (this project targets the **V2** hardware revision specifically — V1 and V2 swap a couple of pins; see [Board setup](#board-setup) below)
+- **Waveshare ESP32-S3-Touch-AMOLED-1.64** (this project targets the **V2** hardware revision specifically — V1 and V2 swap a couple of pins; see [Quick setup](#quick-setup-if-youre-already-comfortable-with-arduino-ide) below)
 - USB-C cable
-- Optional: a single-cell LiPo battery (connects to the board's onboard `BAT` connector)
+- Optional: a **1000mAh 3.7V single-cell LiPo battery** with a 2-pin JST connector (connects to the board's onboard `BAT` connector)
 
 ## Software required
 
@@ -30,7 +40,7 @@ A tiny animated keychain built on the Waveshare ESP32-S3-Touch-AMOLED-1.64 board
 | ESP32 board package (Espressif Systems), **v3.3.11 or newer** | Installed via Boards Manager — must be new enough to include the Waveshare AMOLED board variant |
 | [TFT_eSPI](https://github.com/Bodmer/TFT_eSPI) library | Used only as an in-memory 2D drawing toolkit (fonts, shapes, sprite compositing) — never talks to the display hardware directly, see [Why esp_lcd_sh8601.c/.h exist](#why-esp_lcd_sh8601ch-exist) |
 | [TJpg_Decoder](https://github.com/Bodmer/TJpg_Decoder) library | JPEG decoding for the sword image |
-| [arduino-littlefs-upload](https://github.com/earlephilhower/arduino-littlefs-upload) plugin | Needed to upload the image file separately from the sketch — Arduino IDE 2.x has no built-in equivalent, see [Uploading the image](#3-upload-the-image) |
+| [arduino-littlefs-upload](https://github.com/earlephilhower/arduino-littlefs-upload) plugin | Needed to upload the image file separately from the sketch — Arduino IDE 2.x has no built-in equivalent, see the [Getting Started Guide](GETTING_STARTED.md) |
 
 ## Repository structure
 
@@ -41,41 +51,47 @@ Keychain2/
 ├── esp_lcd_sh8601.h
 └── data/
     └── (put your sword image here — not included, see below)
+enclosure/                ← STL files for the 3D-printed case
+images/                   ← photos used in this README
 ```
 
 Arduino requires the sketch's containing folder to be named exactly the same as the `.ino` file, so don't rename one without the other.
 
+## 3D-printed enclosure
+
+STL files are in [`enclosure/`](enclosure):
+
+| File | What it is |
+|---|---|
+| `Frontplate.stl` | Front cover with the screen cutout |
+| `Backplate.stl` | Back cover, holds the battery |
+| `Button_2x.stl` | Button caps — print **two** of these |
+| `Color_plate.stl` | A separate accent piece for the two-tone look shown in the photos above |
+
+**Two colors recommended** — print `Color_plate.stl` in a contrasting filament color from the rest of the case (a manual filament swap partway through the print works fine; no multi-material printer needed).
+
+**Hardware:**
+
+| Part | Qty | Notes |
+|---|---|---|
+| M3×6mm screws | 4 | Optional — the case is designed to fit them, but they're decorative rather than structural |
+| 5×5×2mm magnets | 8 | These are what actually hold the front and back plates together. Widely available on Amazon. |
+
+**Getting magnet polarity right:** it's easy to place magnets with mismatched polarity when working with two separate plates. An easy way to avoid that: press 4 magnets into place on one plate first, then stack 4 more magnets directly on top of those already-placed ones — they'll snap on in the correct attracting orientation automatically — then press the second plate down onto that stack. Both plates end up with correctly matched polarity every time.
+
+## Quick setup (if you're already comfortable with Arduino IDE)
+
+For the full click-by-click version, see the **[Getting Started Guide](GETTING_STARTED.md)**.
+
+1. Install the **esp32 by Espressif Systems** board package (v3.3.11+) via Boards Manager, using boards URL `https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json`.
+2. Select the **Waveshare ESP32-S3-Touch-AMOLED-1.64** board. Set **Flash Size: 4MB**, **Partition Scheme:** any 4MB scheme with SPIFFS/LittleFS space, **PSRAM: OPI PSRAM**.
+3. Install the **TFT_eSPI** and **TJpg_Decoder** libraries (both by Bodmer) via Library Manager.
+4. Put a **102×249px** JPEG named `sword0.jpg` in `Keychain2/data/`.
+5. Install the [arduino-littlefs-upload](https://github.com/earlephilhower/arduino-littlefs-upload) plugin, then upload the filesystem (**Ctrl+Shift+P → "Upload LittleFS..."**) followed by a normal sketch **Upload**.
+
 ### Why esp_lcd_sh8601.c/.h exist
 
 This board's display (an SH8601 driver chip over a QSPI interface) isn't supported by stock TFT_eSPI. These two files are a real ESP-IDF panel driver, adapted from Waveshare's own example for this exact board, which does the actual job of getting pixels onto the screen. TFT_eSPI is still used, but purely as a software framebuffer/font engine — it never touches the display hardware itself.
-
-## Board setup
-
-1. In Arduino IDE, go to **File → Preferences** and add the Espressif ESP32 boards manager URL if you haven't already (`https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json`).
-2. **Tools → Board → Boards Manager**, install **esp32 by Espressif Systems**, version **3.3.11 or later**.
-3. **Tools → Board**, select the Waveshare ESP32-S3-Touch-AMOLED-1.64 board entry.
-4. Set the rest of the Tools menu:
-   - **Flash Size:** 4MB
-   - **Partition Scheme:** a 4MB scheme that includes SPIFFS/LittleFS space (e.g. *"Default 4MB with spiffs (1.2MB APP/1.5MB SPIFFS)"*) — this project genuinely needs the flash and partition settings to match, otherwise the bootloader will fail to even load a valid partition table
-   - **PSRAM:** OPI PSRAM (enabled) — the display's frame buffers live in PSRAM
-   - **Port:** whichever COM port / /dev/tty your board shows up as
-
-## Installing the image
-
-Only one sword image ships with this project's logic (multi-image rotation exists in the code but is intentionally disabled — see [Re-enabling multiple images](#re-enabling-multiple-sword-images)).
-
-1. Your image **must be exactly `SWORD_WIDTH` × `SWORD_HEIGHT`** pixels as defined near the top of `Keychain2.ino` (currently **102×249**). The code does not resize images — if your file's real dimensions don't match these numbers exactly, you'll get a cropped/misaligned result.
-2. Save it as `sword0.jpg` inside the `Keychain2/data/` folder (replacing the placeholder text file there).
-3. Update `SWORD_WIDTH`/`SWORD_HEIGHT` in the sketch if you use a different size.
-
-### Uploading the image
-
-Arduino IDE 2.x has no built-in LittleFS uploader, so you need a plugin:
-
-1. Download the latest `.vsix` from [arduino-littlefs-upload releases](https://github.com/earlephilhower/arduino-littlefs-upload/releases).
-2. Move it into `<your home folder>/.arduinoIDE/plugins/` (create the folder if it doesn't exist), then fully restart Arduino IDE.
-3. With `Keychain2.ino` open and your image in place inside `data/`, close Serial Monitor if it's open, then run **Ctrl+Shift+P → "Upload LittleFS to Pico/ESP8266/ESP32"**.
-4. Then do a normal **Upload** of the sketch itself. The two uploads are independent — changing the sketch doesn't touch the filesystem, and vice versa.
 
 ## Controls
 
@@ -127,3 +143,4 @@ Being upfront about a few things rather than overselling them:
 
 - Display driver adapted from Waveshare's own example for the ESP32-S3-Touch-AMOLED-1.64 board.
 - QMI8658 register configuration based on the public QST QMI8658A/C datasheet.
+- Master Sword pixel art by the original artist — [see their post here](https://www.reddit.com/r/tearsofthekingdom/comments/12ur12s/i_drew_master_sword_in_pixel_art/).

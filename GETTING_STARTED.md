@@ -74,26 +74,20 @@ Your sword picture gets uploaded separately from the code, using a small add-on 
 4. Move the downloaded `.vsix` file into that `plugins` folder.
 5. Completely close Arduino IDE (not just the window — quit the app) and reopen it.
 
-## Step 7 — Add your sword image
 
-1. Inside the `Keychain2` folder, open the `data` folder.
-2. Delete the placeholder text file in there.
-3. Add your sword picture, and **rename it exactly `sword0.jpg`**.
-4. Your picture must be **exactly 102 × 249 pixels**. If it's a different size, resize it first using any image editor or a free site like [iloveimg.com/resize-image](https://www.iloveimg.com/resize-image) — set the width to 102 and height to 249 exactly.
-
-## Step 8 — Upload your image to the board
+## Step 7 — Upload your image to the board
 
 1. Make sure the Serial Monitor tab (if open anywhere in Arduino IDE) is closed.
 2. Press **Ctrl+Shift+P** (Mac: **Cmd+Shift+P**) to open the Command Palette.
 3. Type **"Upload LittleFS"** and click the option that appears (**"Upload LittleFS to Pico/ESP8266/ESP32"**).
 4. Wait for it to finish — you'll see progress text at the bottom of the window.
 
-## Step 9 — Upload the code
+## Step 8 — Upload the code
 
 1. Click the **→ (Upload)** button at the top-left of the Arduino IDE window (it looks like a right-pointing arrow).
 2. Wait — this takes a minute or two the first time. You'll see "Done uploading" when it's finished.
 
-## Step 10 — You're done!
+## Step 9 — You're done!
 
 Your board should now show the animated sword. Try:
 - **Tap the BOOT button once** — wakes the screen if it's gone to sleep
